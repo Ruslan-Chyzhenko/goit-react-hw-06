@@ -17,6 +17,11 @@ export default function App() {
   const filter = useSelector(selectNameFilter);
   const dispatch = useDispatch();
 
+  if (nameFilter === undefined) {
+    console.error("Name filter is undefined!");
+    return <div>Error: Name filter is undefined!</div>;
+  }
+
   const handleAddContact = (newContact) => {
     dispatch(addContact(newContact));
   };
