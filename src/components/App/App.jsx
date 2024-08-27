@@ -1,5 +1,4 @@
 import ContactList from "../ContactList/ContactList";
-import initialTasks from "../tasks.json";
 import ContactForm from "../ContactForm/ContactForm";
 import SearchBox from "../SearchBox/SearchBox";
 import css from "../App/App.module.css";
@@ -17,7 +16,7 @@ export default function App() {
   const filter = useSelector(selectNameFilter);
   const dispatch = useDispatch();
 
-  if (nameFilter === undefined) {
+  if (filter === undefined) {
     console.error("Name filter is undefined!");
     return <div>Error: Name filter is undefined!</div>;
   }
