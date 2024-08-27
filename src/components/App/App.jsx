@@ -1,47 +1,44 @@
-import { useState, useEffect } from "react";
 import ContactList from "../ContactList/ContactList";
 import initialTasks from "../tasks.json";
 import ContactForm from "../ContactForm/ContactForm";
 import SearchBox from "../SearchBox/SearchBox";
 import css from "../App/App.module.css";
 
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addContact,
+  deleteContact,
+  selectContacts,
+} from "../../redux/contactsSlice";
+import { changeFilter, selectNameFilter } from "../../redux/filtersSlice";
+
 export default function App() {
-  const [tasks, setTasks] = useState(initialTasks);
-  const [filter, setFilter] = useState("");
+  const contacts = useSelector(selectContacts);
+  const filter = useSelector(selectNameFilter);
+  const dispatch = useDispatch();
 
-  // loading Contacts from the LocalStorage
-  useEffect(() => {
-    const savedTasks = JSON.parse(localStorage.getItem("contacts")) || [];
-    setTasks(savedTasks);
-  }, []);
-
-  // saved Contacts in the LocalStorage
-  useEffect(() => {
-    localStorage.setItem("contacts", JSON.stringify(tasks));
-  }, [tasks]);
-
-  const addTask = (newTask) => {
-    setTasks((prevTasks) => {
-      return [...prevTasks, newTask];
-    });
+  const handleAddContact = (newContact) => {
+    dispatch(addContact(newContact));
   };
 
-  const deleteTask = (taskId) => {
-    setTasks((prevTasks) => {
-      return prevTasks.filter((task) => task.id !== taskId);
-    });
+  const handleDeleteContact = (id) => {
+    dispatch(deleteContact(id));
   };
 
-  const visibleTasks = tasks.filter((task) =>
-    task.name.toLowerCase().includes(filter.toLowerCase())
+  const handleFilterChange = (value) => {
+    dispatch(changeFilter(value));
+  };
+
+  const visibleContacts = contacts.filter((contact) =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
   );
 
   return (
     <div className={css.container}>
       <h1>PhoneBook</h1>
-      <ContactForm onAdd={addTask} />
-      <SearchBox value={filter} onFilter={setFilter} />
-      <ContactList tasks={visibleTasks} onDelete={deleteTask} />
+      <ContactForm onAdd={handleAddContact} />
+      <SearchBox value={filter} onFilter={handleFilterChange} />
+      <ContactList contacts={visibleContacts} onDelete={handleDeleteContact} />
     </div>
   );
 }
