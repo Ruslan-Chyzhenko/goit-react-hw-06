@@ -20,7 +20,7 @@ export default function ContactList() {
   return (
     <div className={css.gridContainer}>
       {visibleContacts.map((contact) => (
-        <li className={css.item} key={task.id}>
+        <li className={css.item} key={id}>
           <Contact data={contact} onDelete={handleDeleteContact} />
         </li>
       ))}
